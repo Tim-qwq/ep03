@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>汤圆的家-留言板</title>
+  </head>
+  <body>
+    <div class="box">
+      <div class="tipsBox">
+        为了您更好的使用，<br/>
+        &emsp;&emsp;我们将不懈努力。
+      </div>
+      <div class="msgBox">
+        <div class="msgTopBox">
+          <textarea type="text" id="textVal"></textarea>
+          <div>
+            <input type="file" id="imageUpload" accept="image/*">
+            <div class="imgBox">
+              <img id="imgView" src="#" alt="">
+            </div>
+            <input type="number" id="phoneVal" placeholder="请输入联系方式">
+            <button onclick="submit()">提交</button>
+          </div>
+        </div>
+        <div class="conBox" id="conBox"></div>
+      </div>
+    </div>
+  </body>
+  <script src="./js/jquery.min.js"></script>
+  <script>
+    let arr=[]
+    let imgUrl=''
+    function submit(){
+      let textVal=$('#textVal').val()
+      let phoneVal=$('#phoneVal').val()
+      let conHtml=''
+      let date=new Date()
+      let year=date.getFullYear()
+      let month=date.getMonth()+1
+      let day=date.getDate()
+      let hours=date.getHours()
+      let min=date.getMinutes()
+      let sec=date.getSeconds()
+      let dateVal=year+'-'+month+'-'+day+' '+hours+':'+min+':'+sec
+      if(imgUrl===''){
+        imgUrl='./img/use.jpg'
+      }
+      arr.unshift({textVal,phoneVal,imgUrl})
+      
+      for(let i in arr){
+        conHtml=conHtml+`<div class="msgInner1">
+            <div class="msgTitleBox">
+              <div class="imgBox">
+                <img src="${arr[i].imgUrl}" alt="">
+              </div>
+              <div class="phoneBox">${arr[i].phoneVal}</div>
+            </div>
+            <div class="conTextBox">${arr[i].textVal}</div>
+            <div class="timeBox">${dateVal}</div>
+          </div>`
+      }
+      $('#conBox').html(conHtml)
+      imgUrl=''
+      document.getElementById('imgView').src='#'
+      document.getElementById('imageUpload').value=''
+      $('#textVal').val('')
+      $('#phoneVal').val('')
+    }
+    document.getElementById('imageUpload').addEventListener('change', function(e){
+      let file = e.target.files[0];
+      let reader = new FileReader();
+      // 确保文件内容是图片
+      if(file&&file.type.startsWith('image/')){
+        reader.onload=function(e){
+          imgUrl=e.target.result
+          document.getElementById('imgView').src=e.target.result
+        }
+        // 读取当前文件内容
+        reader.readAsDataURL(file)
+      }else{
+        document.getElementById('imgView').src='#'
+      }
+    })
+  </script>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+    }
+    .box{
+      width:100%;
+      height:100vh;
+      background-image: url('./img/mountain.jpg');
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+    }
+    .tipsBox{
+      font-size: 20px;
+      color:white;
+      position:absolute;
+      bottom: 50px;
+      left:50px;
+    }
+    .msgBox{
+      width:700px;
+      padding-top:50px;
+      margin:0px auto;
+    }
+    .msgTopBox{
+      padding:10px;
+      background: white;
+      opacity: 0.8;
+    }
+    .msgTopBox textarea{
+      width:100%;
+      height: 100px;
+    }
+    .msgTopBox div{
+      text-align: right;
+    }
+    .msgTopBox input{
+      height:25px;
+    }
+    .msgTopBox button{
+      height:25px;
+      width:55px;
+      cursor: pointer;
+    }
+    .conBox{
+      padding:25px 10px;
+      background: white;
+      opacity: 0.8;
+      height:650px;
+      overflow-x: hidden;
+      overflow-y: visible;
+    }
+    .msgInner1{
+      border-bottom:1px solid #ccc;
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+    }
+    .msgTitleBox{
+      display: flex;
+      justify-content: start;
+      align-items: center;
+    }
+    .imgBox{
+      width:55px;
+      height:55px;
+      border-radius: 55px;
+      overflow: hidden;
+      margin-right: 15px;
+    }
+    .imgBox img{
+      width:55px;
+      height:55px;
+    }
+    .phoneBox{
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .conTextBox{
+      margin:15px 50px;
+    }
+    .timeBox{
+      text-align: right;
+    }
+  </style>
+</html>
